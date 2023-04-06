@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,19 +17,23 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "tweets")
 @NoArgsConstructor
-public class Tweet extends User{
+public class Tweet {
 
-  public Tweet(TweetDTO req){
-    super.setAvatar(req.avatar());
-    super.setUsername(req.username());
-    this.tweet = req.tweet();
+  public Tweet(TweetDTO req, User user) {
+    this.user = user;
+    this.text = req.text();
   }
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
   private Long id;
-  
+
   @Column(nullable = false)
-  private String tweet;
+  private String text;
+
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private User user;
 
 }
