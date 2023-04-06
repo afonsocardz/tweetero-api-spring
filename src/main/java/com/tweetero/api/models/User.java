@@ -1,5 +1,8 @@
 package com.tweetero.api.models;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tweetero.api.dto.UserDTO;
 
 import jakarta.persistence.Column;
@@ -7,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler", "tweets"})
 public class User {
 
   public User(UserDTO req) {
@@ -24,6 +29,7 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
   private Long id;
 
   @Column(nullable = false)
@@ -31,4 +37,7 @@ public class User {
 
   @Column(nullable = false)
   private String avatar;
+
+  @OneToMany(mappedBy = "user")
+  private List<Tweet> tweets;
 }
